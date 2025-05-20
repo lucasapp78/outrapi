@@ -87,10 +87,7 @@
     <option value="CL">Champions League</option>
   </select>
 
-  <label for="oddMin">Odd mínima:</label>
-  <input type="number" id="oddMin" step="0.01" value="1.10">
-  <label for="oddMax">Odd máxima:</label>
-  <input type="number" id="oddMax" step="0.01" value="10.00">
+  
 
   <button onclick="carregarJogosFootballData()">🔄 Carregar Odds Reais</button>
 
@@ -147,10 +144,11 @@
           odds.outcomes.forEach(outcome => {
             const nome = outcome.name;
             const odd = parseFloat(outcome.odd);
-            if (odd >= oddMin && odd <= oddMax) {
-              oddsHTML += `
-                <label>
-                  <input type="checkbox" class="jogoCheck" data-nome="${nome}" data-odd="${odd.toFixed(2)}" />
+            oddsHTML += `
+  <label>
+    <input type="checkbox" class="jogoCheck" data-nome="${nome}" data-odd="${odd.toFixed(2)}" />
+    ${nome} - ${odd.toFixed(2)}
+  </label>`;" data-odd="${odd.toFixed(2)}" />
                   ${nome} - ${odd.toFixed(2)}
                 </label>`;
             }
