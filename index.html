@@ -119,7 +119,7 @@
     const liga = document.getElementById("liga").value;
     const oddMin = parseFloat(document.getElementById("oddMin").value);
     const oddMax = parseFloat(document.getElementById("oddMax").value);
-    const url = `https://api.football-data.org/v4/competitions/${liga}/matches?status=SCHEDULED&include=odds`;
+    const url = `https://proxy-odds.onrender.com/jogos/${liga}`;
 
     const inputs = document.getElementById("inputs");
     inputs.innerHTML = "🔄 Carregando...";
