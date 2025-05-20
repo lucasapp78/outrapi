@@ -87,7 +87,10 @@
     <option value="CL">Champions League</option>
   </select>
 
-  
+  <label for="oddMin">Odd mínima:</label>
+  <input type="number" id="oddMin" step="0.01" value="1.10">
+  <label for="oddMax">Odd máxima:</label>
+  <input type="number" id="oddMax" step="0.01" value="10.00">
 
   <button onclick="carregarJogosFootballData()">🔄 Carregar Odds Reais</button>
 
@@ -114,8 +117,8 @@
   async function carregarJogosFootballData() {
     const API_KEY = "74cf6bd09f51470390067e5ac25ee336";
     const liga = document.getElementById("liga").value;
-  //  const oddMin = parseFloat(document.getElementById("oddMin").value);
-  //  const oddMax = parseFloat(document.getElementById("oddMax").value);
+    const oddMin = parseFloat(document.getElementById("oddMin").value);
+    const oddMax = parseFloat(document.getElementById("oddMax").value);
     const url = `https://proxy-odds.onrender.com/jogos/${liga}`;
 
     const inputs = document.getElementById("inputs");
@@ -139,25 +142,24 @@
 
         let oddsHTML = "";
 
-        const odds = (jogo.odds?.markets || []).find(m =>
-  (m.key && m.key.toUpperCase() === "H2H") ||
-  (m.market && m.market.toUpperCase() === "H2H")
-);
+        const odds = jogo.odds?.markets?.find(m => m.key === "H2H" || m.market === "H2H");
+        if (odds?.outcomes) {
+          odds.outcomes.forEach(outcome => {
+            const nome = outcome.name;
+            const odd = parseFloat(outcome.odd);
+            if (odd >= oddMin && odd <= oddMax) {
+              oddsHTML += `
+                <label>
+                  <input type="checkbox" class="jogoCheck" data-nome="${nome}" data-odd="${odd.toFixed(2)}" />
+                  ${nome} - ${odd.toFixed(2)}
+                </label>`;
+            }
+          });
+        }
 
-if (odds?.outcomes && odds.outcomes.length > 0) {
-  odds.outcomes.forEach(outcome => {
-    const nome = outcome.name;
-    const odd = parseFloat(outcome.odd);
-    oddsHTML += `
-      <label>
-        <input type="checkbox" class="jogoCheck" data-nome="${nome}" data-odd="${odd.toFixed(2)}" />
-        ${nome} - ${odd.toFixed(2)}
-      </label>`;
-  });
-} else {
-  oddsHTML = "<em>Odds indisponíveis no momento.</em>";
-}
-
+        if (!oddsHTML) {
+          oddsHTML = "<em>Odds indisponíveis ou fora do filtro.</em>";
+        }
 
         inputs.innerHTML += `
           <div class="jogo-card">
