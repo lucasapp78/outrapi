@@ -144,11 +144,13 @@
           odds.outcomes.forEach(outcome => {
             const nome = outcome.name;
             const odd = parseFloat(outcome.odd);
-            oddsHTML += `
+            
+oddsHTML += `
   <label>
     <input type="checkbox" class="jogoCheck" data-nome="${nome}" data-odd="${odd.toFixed(2)}" />
     ${nome} - ${odd.toFixed(2)}
-  </label>`;" data-odd="${odd.toFixed(2)}" />
+  </label>`;
+" data-odd="${odd.toFixed(2)}" />
                   ${nome} - ${odd.toFixed(2)}
                 </label>`;
             }
