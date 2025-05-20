@@ -139,27 +139,25 @@
 
         let oddsHTML = "";
 
-        const odds = jogo.odds?.markets?.find(m => m.key === "H2H" || m.market === "H2H");
-        if (odds?.outcomes) {
-          odds.outcomes.forEach(outcome => {
-            const nome = outcome.name;
-            const odd = parseFloat(outcome.odd);
-            
-oddsHTML += `
-  <label>
-    <input type="checkbox" class="jogoCheck" data-nome="${nome}" data-odd="${odd.toFixed(2)}" />
-    ${nome} - ${odd.toFixed(2)}
-  </label>`;
-" data-odd="${odd.toFixed(2)}" />
-                  ${nome} - ${odd.toFixed(2)}
-                </label>`;
-            }
-          });
-        }
+        const odds = (jogo.odds?.markets || []).find(m =>
+  (m.key && m.key.toUpperCase() === "H2H") ||
+  (m.market && m.market.toUpperCase() === "H2H")
+);
 
-        if (!oddsHTML) {
-          oddsHTML = "<em>Odds indisponíveis ou fora do filtro.</em>";
-        }
+if (odds?.outcomes && odds.outcomes.length > 0) {
+  odds.outcomes.forEach(outcome => {
+    const nome = outcome.name;
+    const odd = parseFloat(outcome.odd);
+    oddsHTML += `
+      <label>
+        <input type="checkbox" class="jogoCheck" data-nome="${nome}" data-odd="${odd.toFixed(2)}" />
+        ${nome} - ${odd.toFixed(2)}
+      </label>`;
+  });
+} else {
+  oddsHTML = "<em>Odds indisponíveis no momento.</em>";
+}
+
 
         inputs.innerHTML += `
           <div class="jogo-card">
